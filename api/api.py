@@ -7,7 +7,7 @@ from ultralytics import YOLO
 import tensorflow as tf
 # from tensorflow.keras.models import load_model
 from PIL import Image
-import mediapipe as mp
+# import mediapipe as mp
 
 # Initialiser Flask et autoriser les CORS
 app = Flask(__name__)
@@ -26,49 +26,49 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-# ============================ Détection faciale ============================
-mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(
-    static_image_mode=False, max_num_faces=1, refine_landmarks=True)
+# # ============================ Détection faciale ============================
+# mp_face_mesh = mp.solutions.face_mesh
+# face_mesh = mp_face_mesh.FaceMesh(
+#     static_image_mode=False, max_num_faces=1, refine_landmarks=True)
 
 
-def calculate_head_orientation(image):
-    """
-    Calcule les angles d'orientation (Yaw, Pitch, Roll) de la tête basée sur les landmarks du visage.
-    """
-    frame_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    results = face_mesh.process(frame_rgb)
+# def calculate_head_orientation(image):
+#     """
+#     Calcule les angles d'orientation (Yaw, Pitch, Roll) de la tête basée sur les landmarks du visage.
+#     """
+#     frame_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+#     results = face_mesh.process(frame_rgb)
 
-    if results.multi_face_landmarks:
-        for face_landmarks in results.multi_face_landmarks:
-            landmarks = face_landmarks.landmark
+#     if results.multi_face_landmarks:
+#         for face_landmarks in results.multi_face_landmarks:
+#             landmarks = face_landmarks.landmark
 
-            # Points clés pour les calculs
-            nose = landmarks[1]
-            left_eye_outer = landmarks[33]
-            right_eye_outer = landmarks[263]
-            chin = landmarks[152]
+#             # Points clés pour les calculs
+#             nose = landmarks[1]
+#             left_eye_outer = landmarks[33]
+#             right_eye_outer = landmarks[263]
+#             chin = landmarks[152]
 
-            # Yaw Angle (orientation horizontale gauche-droite)
-            eye_center_x = (left_eye_outer.x + right_eye_outer.x) / 2
-            eye_center_y = (left_eye_outer.y + right_eye_outer.y) / 2
-            yaw_angle = math.degrees(math.atan2(
-                nose.x - eye_center_x, nose.y - eye_center_y))
+#             # Yaw Angle (orientation horizontale gauche-droite)
+#             eye_center_x = (left_eye_outer.x + right_eye_outer.x) / 2
+#             eye_center_y = (left_eye_outer.y + right_eye_outer.y) / 2
+#             yaw_angle = math.degrees(math.atan2(
+#                 nose.x - eye_center_x, nose.y - eye_center_y))
 
-            # Pitch Angle (orientation haut-bas)
-            pitch_angle = math.degrees(math.atan2(
-                nose.y - chin.y, nose.z - chin.z))
+#             # Pitch Angle (orientation haut-bas)
+#             pitch_angle = math.degrees(math.atan2(
+#                 nose.y - chin.y, nose.z - chin.z))
 
-            # Roll Angle (inclinaison de la tête)
-            roll_angle = math.degrees(math.atan2(left_eye_outer.y - right_eye_outer.y,
-                                                 left_eye_outer.x - right_eye_outer.x))
+#             # Roll Angle (inclinaison de la tête)
+#             roll_angle = math.degrees(math.atan2(left_eye_outer.y - right_eye_outer.y,
+#                                                  left_eye_outer.x - right_eye_outer.x))
 
-            return {
-                "yaw": round(yaw_angle, 2),
-                "pitch": round(pitch_angle, 2),
-                "roll": round(roll_angle, 2)
-            }
-    return None
+#             return {
+#                 "yaw": round(yaw_angle, 2),
+#                 "pitch": round(pitch_angle, 2),
+#                 "roll": round(roll_angle, 2)
+#             }
+#     return None
 
 # ============================ Préparer le modèle landmarks ======================================
 
