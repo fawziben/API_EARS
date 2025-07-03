@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import math
 from ultralytics import YOLO
-# import tensorflow as tf
+import tensorflow as tf
 # from tensorflow.keras.models import load_model
 from PIL import Image
 # import mediapipe as mp
@@ -14,9 +14,9 @@ app = Flask(__name__)
 CORS(app)
 
 # ============================ Chargement des modèles ============================
-yolo_model_path = 'models\model_yolo8_small.pt'
+yolo_model_path = 'models/model_yolo8_small.pt'
 # ajouter votre modèle ici
-landmark_model_path = 'models\model_landmark_lite.tflite'
+landmark_model_path = 'models/model_landmark_lite.tflite'
 
 yolo_model = YOLO(yolo_model_path)
 
