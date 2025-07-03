@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import math
 from ultralytics import YOLO
-import tensorflow as tf
+# import tensorflow as tf
 # from tensorflow.keras.models import load_model
 from PIL import Image
 # import mediapipe as mp
